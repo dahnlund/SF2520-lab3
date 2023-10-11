@@ -1,0 +1,41 @@
+% Computer exercise 3 Part 1, David Ahnlund Emil Gestsson
+clc, clear;
+
+N = 100; %Discretization resolution in x
+M = 100000; %Discretization resolution in t
+Lx = 1;
+T = 2;
+d = 0.35;
+a = 1.2;
+dx = Lx/N;
+dt = T/M;
+
+%% A
+
+d1 = diag(-2*ones(N-1,1),0); d2 = diag(1*ones(N-2,1),1); d3 = diag(1*ones(N-2,1),-1); %Define diagonals ins A
+A = d*1/dx^2 * (d1+d2+d3);
+
+%Adjust for Neumann boundary condition
+A(end,end) = d*1/dx^2 * (2/3);
+A(end,end-1) = d*1/dx^2 * (-2/3);
+
+b = @(t) 1/(dx^2)*[ sin(pi*t/a) * (t>a) ;zeros(N-2,1)];
+
+% Initial condition
+u0 = zeros(N-1,1);
+
+saved_u = zeros(N-1,M+1);
+saved_u(:,1) = u0;
+
+%Explicit Euler
+uk = u0;
+t = 0:dt:T;
+for n = 2:length(t)
+    u_new = A*uk + b(t(n));
+    saved_u(:,n) = u_new;
+    uk = u_new;
+end
+
+x = dx:dx:Lx-dx;
+mesh(x,t,saved_u)
+
