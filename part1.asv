@@ -3,23 +3,28 @@ clc, clear;
 
 N = 100; %Discretization resolution in x
 M = 100000; %Discretization resolution in t
+
 Lx = 1;
 T = 2;
 d = 0.35;
 a = 1.2;
+
+
+
 dx = Lx/N;
 dt = T/M;
 
-%% A
 
-d1 = diag(-2*ones(N-1,1),0); d2 = diag(1*ones(N-2,1),1); d3 = diag(1*ones(N-2,1),-1); %Define diagonals ins A
-A = d*1/dx^2 * (d1+d2+d3);
+
+
+%% A
+A = d*1/dx^2 * spdiags([1*ones(N-1,1) (-2*ones(N-1,1)) 1*ones(N-1,1)], -1:1, N-1, N-1);
 
 %Adjust for Neumann boundary condition
-A(end,end) = d*1/dx^2 * (2/3);
-A(end,end-1) = d*1/dx^2 * (-2/3);
+A(end,end) = d*1/dx^2 * (-2/3);
+A(end,end-1) = d*1/dx^2 * (2/3);
 
-b = @(t) 1/(dx^2)*[ sin(pi*t/a) * (t>a) ;zeros(N-2,1)];
+b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
 % Initial condition
 u0 = zeros(N-1,1);
@@ -31,11 +36,17 @@ saved_u(:,1) = u0;
 uk = u0;
 t = 0:dt:T;
 for n = 2:length(t)
-    u_new = A*uk + b(t(n));
+    u_new = uk + dt*(A*uk + b(t(n)));
     saved_u(:,n) = u_new;
     uk = u_new;
 end
 
-x = dx:dx:Lx-dx;
-mesh(x,t,saved_u)
+%Apply boundaries to solution
+uN = 1/3*(4*saved_u(end,:)-saved_u(end-1,:));
+u_initial = sin(pi*t/a) .* (t<=a);
+saved_u = [u_initial;saved_u;uN];
+
+x = 0:dx:Lx;
+surf(t,x,saved_u)
+shading interp
 
