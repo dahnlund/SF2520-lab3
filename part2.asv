@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 120;
+N = 240;
 h = Lx/N;
 M = Ly/h;
 
@@ -29,7 +29,7 @@ F(:,1) = F(:,1) + T_ext/h^2;
 
 f = reshape(F, (N-1)*(M-1),1);
 
-dt = 0.05;
+dt = 0.1;
 u0 = T_ext * ones(size(f));
 
 %Crank Nicolson
@@ -40,13 +40,14 @@ saved_u(:,1) = u0;
 uk = u0;
 for i = 2:length(tau)
     u_new = (speye(size(A)) - 1/2 * dt*A)\((speye(size(A)) + 1/2 * dt*A)*uk + dt*f);
-    %u_new = (speye(size(A)) - 1 * dt*A)\(uk + dt*f);
     saved_u(:,i) = u_new;
     uk = u_new;
 end
 
+u_62 = zeros(length(tau),1); % For part c
+
 %Plot the solution
-for frame = 1:1:40/dt
+for frame = 1:1:40/dt+1
     tf = frame;
 
     y = 0:h:Ly;
@@ -65,20 +66,41 @@ for frame = 1:1:40/dt
     zlim([25 70])
     xlabel("y")
     ylabel("x")
-    
+        
     drawnow; % Refresh the plot
+
+    %Save at (6,2), for part c
+    u_62(frame) = u(round(x,6)==6,round(y,6)==2);
+end
+
+%% B
+frames = [0 1 4 12 22 40];
+
+for i = 1:length(frames)
+
+    y = 0:h:Ly;
+    x = 0:h:Lx;
+
+    u = reshape(saved_u(:,tau == frames(i)), (N-1), (M-1));
+    u_y0 = T_ext * ones(N-1,1);
+    u_M = 1/3*(4*u(:,end)-u(:,end-1));
+    u = [u_y0 u u_M];   % Adding boundaries along y
+    u_N = 1/3*(4*u(end,:)-u(end-1,:));
+    u_x0 = 1/3*(4*u(1,:)-u(2,:));
+    u = [u_x0;u;u_N];  %Adding boundaries along x
+    
+    figure
+    mesh(y,x,u); % Update the plot
+    view([-71.1 21.5877372262774]);
+    zlim([25 70])
+    xlabel("y")
+    ylabel("x")
+    title("Solution at")
 end
 
 %% C
 
-u = saved_u(:,tau==40);
-u = reshape(u, (N-1), (M-1));
-u_y0 = T_ext * ones(N-1,1);
-u_M = 1/3*(4*u(:,end)-u(:,end-1));
-u = [u_y0 u u_M];   % Adding boundaries along y
-u_N = 1/3*(4*u(end,:)-u(end-1,:));
-u_x0 = 1/3*(4*u(1,:)-u(2,:));
-u = [u_x0;u;u_N];  %Adding boundaries along x
+fprintf("u(6,2,40) = %.04f\n\n", u_62(end))
 
-fprintf("u(6,2,40) = %.04f\n", u(x==6, y==2))
+plot(tau, u_62)
    
