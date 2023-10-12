@@ -45,10 +45,9 @@ for i = 2:length(tau)
     uk = u_new;
 end
 
-
+%Plot the solution
 for frame = 1:1:40/dt
-    tf = frame; % Time for current frame
-     % Update y values based on time
+    tf = frame;
 
     y = 0:h:Ly;
     x = 0:h:Lx;
@@ -63,6 +62,7 @@ for frame = 1:1:40/dt
 
     mesh(y,x,u); % Update the plot
     view([-71.1 21.5877372262774]);
+    zlim([25 70])
     xlabel("y")
     ylabel("x")
     
