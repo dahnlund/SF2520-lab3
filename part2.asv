@@ -80,5 +80,5 @@ u_N = 1/3*(4*u(end,:)-u(end-1,:));
 u_x0 = 1/3*(4*u(1,:)-u(2,:));
 u = [u_x0;u;u_N];  %Adding boundaries along x
 
-fprintf("u(6,2,40) = %.04f\n\n", u(x==6, y==2))
+fprintf("u(6,2,40) = %.04f\n", u(x==6, y==2))
    
