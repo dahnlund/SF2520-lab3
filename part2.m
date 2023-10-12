@@ -48,10 +48,16 @@ end
 
 y = h:h:Ly-h;
 x = h:h:Lx-h;
-sol1 = reshape(saved_u(:,tau==1), (N-1), (M-1));
-mesh(y,x,sol1)
-xlabel("y")
-ylabel("x")
+
+for frame = 1:1:40/dt
+    tf = frame; % Time for current frame
+     % Update y values based on time
+    mesh(y,x,reshape(saved_u(:,frame), (N-1), (M-1))); % Update the plot
+    xlabel("y")
+    ylabel("x")
+    
+    drawnow; % Refresh the plot
+end
 
 %%
 T = reshape(t, (N-1), (M-1));
