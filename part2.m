@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 120;
+N = 240;
 h = Lx/N;
 M = Ly/h;
 
@@ -29,7 +29,7 @@ F(:,1) = F(:,1) + T_ext/h^2;
 
 f = reshape(F, (N-1)*(M-1),1);
 
-dt = 0.05;
+dt = 0.1;
 u0 = T_ext * ones(size(f));
 
 %Crank Nicolson
