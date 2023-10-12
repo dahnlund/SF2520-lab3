@@ -40,7 +40,7 @@ saved_u(:,1) = u0;
 uk = u0;
 for i = 2:length(tau)
    
-    u_new = (eye + 1/2 * dt*A)\((eye + 1/2 * dt*A)*uk + dt*f);
+    u_new = (eye - 1/2 * dt*A)\((eye + 1/2 * dt*A)*uk + dt*f);
     saved_u(:,i) = u_new;
     uk = u_new;
 
@@ -48,7 +48,7 @@ end
 
 y = h:h:Ly-h;
 x = h:h:Lx-h;
-sol1 = reshape(saved_u(:,tau==40), (N-1), (M-1));
+sol1 = reshape(saved_u(:,tau==1), (N-1), (M-1));
 mesh(y,x,sol1)
 xlabel("y")
 ylabel("x")
