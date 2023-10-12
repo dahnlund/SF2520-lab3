@@ -56,7 +56,7 @@ xlabel("x")
 title("Plot of u at specific \tau")
 legend("\tau = "+string(tau))
 
-%% Using matlab functions
+%% Using matlab functions:
 %% ODE23
 dudt = @(t,u) A*u+b(t);
 
@@ -89,4 +89,22 @@ u_ode23s = [u_initial;u_ode23s;uN];
 
 x = 0:Lx/N:Lx;
 surf(t,x,u_ode23s)
+shading interp
+%% ODE23sJ
+
+dudt = @(t,u) A*u+b(t);
+
+options = odeset("Jacobian",A);
+[t, u_ode23sJ] = ode23s(dudt, [0 2], u0, options);
+u_ode23sJ = u_ode23sJ';
+
+N = length(u_ode23sJ(:,1))+1;
+
+%Apply boundaries to solution
+uN = 1/3*(4*u_ode23sJ(end,:)-u_ode23sJ(end-1,:));
+u_initial = (sin(pi*t/a) .* (t<=a))';
+u_ode23sJ = [u_initial;u_ode23sJ;uN];
+
+x = 0:Lx/N:Lx;
+surf(t,x,u_ode23sJ)
 shading interp
