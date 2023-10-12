@@ -58,53 +58,119 @@ legend("\tau = "+string(tau))
 
 %% Using matlab functions:
 %% ODE23
-dudt = @(t,u) A*u+b(t);
 
-[t, u_ode23] = ode23(dudt, [0 2], u0);
-u_ode23 = u_ode23';
+N_list = [100 200 400];
 
-N = length(u_ode23(:,1))+1;
+for i = 1:length(N_list)
+    N = N_list(i);
+    dx = Lx/N;
+    
+    u0 = zeros(N-1,1);
 
-%Apply boundaries to solution
-uN = 1/3*(4*u_ode23(end,:)-u_ode23(end-1,:));
-u_initial = (sin(pi*t/a) .* (t<=a))';
-u_ode23 = [u_initial;u_ode23;uN];
+    A = d*1/dx^2 * spdiags([1*ones(N-1,1) (-2*ones(N-1,1)) 1*ones(N-1,1)], -1:1, N-1, N-1);
 
-x = 0:Lx/N:Lx;
-surf(t,x,u_ode23)
-shading interp
+    %Adjust for Neumann boundary condition
+    A(end,end) = d*1/dx^2 * (-2/3);
+    A(end,end-1) = d*1/dx^2 * (2/3);
+    
+    b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
+
+    dudt = @(t,u) A*u+b(t);
+    options = odeset(RelTol=0.001);
+
+    tic;
+    [t, u_ode23] = ode23(dudt, [0 2], u0, options);
+    time = toc;
+    u_ode23 = u_ode23';
+    
+    %Apply boundaries to solution
+    uN = 1/3*(4*u_ode23(end,:)-u_ode23(end-1,:));
+    u_initial = (sin(pi*t/a) .* (t<=a))';
+    u_ode23 = [u_initial;u_ode23;uN];
+    fprintf("ODE23: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
+    
+    if N == 100
+        x = 0:Lx/N:Lx;
+        surf(t,x,u_ode23)
+        shading interp
+    end
+end
+fprintf("\n\n")
 %% ODE23s
 
-dudt = @(t,u) A*u+b(t);
+N_list = [100 200 400];
 
-[t, u_ode23s] = ode23s(dudt, [0 2], u0);
-u_ode23s = u_ode23s';
+for i = 1:length(N_list)
+    N = N_list(i);
+    dx = Lx/N;
+    
+    u0 = zeros(N-1,1);
 
-N = length(u_ode23s(:,1))+1;
+    A = d*1/dx^2 * spdiags([1*ones(N-1,1) (-2*ones(N-1,1)) 1*ones(N-1,1)], -1:1, N-1, N-1);
 
-%Apply boundaries to solution
-uN = 1/3*(4*u_ode23s(end,:)-u_ode23s(end-1,:));
-u_initial = (sin(pi*t/a) .* (t<=a))';
-u_ode23s = [u_initial;u_ode23s;uN];
+    %Adjust for Neumann boundary condition
+    A(end,end) = d*1/dx^2 * (-2/3);
+    A(end,end-1) = d*1/dx^2 * (2/3);
+    
+    b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
-x = 0:Lx/N:Lx;
-surf(t,x,u_ode23s)
-shading interp
+    dudt = @(t,u) A*u+b(t);
+    options = odeset(RelTol=0.001);
+
+    tic;
+    [t, u_ode23s] = ode23s(dudt, [0 2], u0, options);
+    time = toc;
+    u_ode23s = u_ode23s';
+    
+    %Apply boundaries to solution
+    uN = 1/3*(4*u_ode23s(end,:)-u_ode23s(end-1,:));
+    u_initial = (sin(pi*t/a) .* (t<=a))';
+    u_ode23s = [u_initial;u_ode23s;uN];
+    fprintf("ODE23s: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
+    
+    if N == 100
+        x = 0:Lx/N:Lx;
+        surf(t,x,u_ode23s)
+        shading interp
+    end
+end
+fprintf("\n\n")
 %% ODE23sJ
 
-dudt = @(t,u) A*u+b(t);
+N_list = [100 200 400];
 
-options = odeset("Jacobian",A);
-[t, u_ode23sJ] = ode23s(dudt, [0 2], u0, options);
-u_ode23sJ = u_ode23sJ';
+for i = 1:length(N_list)
+    N = N_list(i);
+    dx = Lx/N;
+    
+    u0 = zeros(N-1,1);
 
-N = length(u_ode23sJ(:,1))+1;
+    A = d*1/dx^2 * spdiags([1*ones(N-1,1) (-2*ones(N-1,1)) 1*ones(N-1,1)], -1:1, N-1, N-1);
 
-%Apply boundaries to solution
-uN = 1/3*(4*u_ode23sJ(end,:)-u_ode23sJ(end-1,:));
-u_initial = (sin(pi*t/a) .* (t<=a))';
-u_ode23sJ = [u_initial;u_ode23sJ;uN];
+    %Adjust for Neumann boundary condition
+    A(end,end) = d*1/dx^2 * (-2/3);
+    A(end,end-1) = d*1/dx^2 * (2/3);
+    
+    b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
-x = 0:Lx/N:Lx;
-surf(t,x,u_ode23sJ)
-shading interp
+    dudt = @(t,u) A*u+b(t);
+    options = odeset("Jacobian",A,RelTol=0.001);
+    
+    tic;
+    [t, u_ode23sJ] = ode23s(dudt, [0 2], u0, options);
+    time = toc;
+    u_ode23sJ = u_ode23sJ';
+    
+    %Apply boundaries to solution
+    uN = 1/3*(4*u_ode23sJ(end,:)-u_ode23sJ(end-1,:));
+    u_initial = (sin(pi*t/a) .* (t<=a))';
+    u_ode23sJ = [u_initial;u_ode23sJ;uN];
+    fprintf("ODE23sJ: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
+    
+    if N == 100
+        x = 0:Lx/N:Lx;
+        surf(t,x,u_ode23sJ)
+        shading interp
+    end
+end
+fprintf("\n\n")
