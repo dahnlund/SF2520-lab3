@@ -76,7 +76,7 @@ for i = 1:length(N_list)
     b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
     dudt = @(t,u) A*u+b(t);
-    options = odeset(RelTol=0.001);
+    options = odeset(RelTol=1e-4);
 
     tic;
     [t, u_ode23] = ode23(dudt, [0 2], u0, options);
@@ -115,7 +115,7 @@ for i = 1:length(N_list)
     b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
     dudt = @(t,u) A*u+b(t);
-    options = odeset(RelTol=0.001);
+    options = odeset(RelTol=1e-4);
 
     tic;
     [t, u_ode23s] = ode23s(dudt, [0 2], u0, options);
@@ -154,7 +154,7 @@ for i = 1:length(N_list)
     b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
     dudt = @(t,u) A*u+b(t);
-    options = odeset("Jacobian",A,RelTol=0.001);
+    options = odeset("Jacobian",A,RelTol=1e-4);
     
     tic;
     [t, u_ode23sJ] = ode23s(dudt, [0 2], u0, options);

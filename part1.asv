@@ -76,7 +76,7 @@ for i = 1:length(N_list)
     b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
     dudt = @(t,u) A*u+b(t);
-    options = odeset(RelTol=0.001);
+    options = odeset(RelTol=1e-8);
 
     tic;
     [t, u_ode23] = ode23(dudt, [0 2], u0, options);
@@ -115,7 +115,7 @@ for i = 1:length(N_list)
     b = @(t) d/(dx^2)*[ sin(pi*t/a) * (t<=a) ;zeros(N-2,1)];
 
     dudt = @(t,u) A*u+b(t);
-    options = odeset(RelTol=0.001);
+    options = odeset(RelTol=1e-8);
 
     tic;
     [t, u_ode23s] = ode23s(dudt, [0 2], u0, options);
@@ -126,7 +126,7 @@ for i = 1:length(N_list)
     uN = 1/3*(4*u_ode23s(end,:)-u_ode23s(end-1,:));
     u_initial = (sin(pi*t/a) .* (t<=a))';
     u_ode23s = [u_initial;u_ode23s;uN];
-    fprintf("ODE23: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
+    fprintf("ODE23s: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
     
     if N == 100
         x = 0:Lx/N:Lx;
@@ -165,7 +165,7 @@ for i = 1:length(N_list)
     uN = 1/3*(4*u_ode23sJ(end,:)-u_ode23sJ(end-1,:));
     u_initial = (sin(pi*t/a) .* (t<=a))';
     u_ode23sJ = [u_initial;u_ode23sJ;uN];
-    fprintf("ODE23: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
+    fprintf("ODE23sJ: #Time steps = %.0d, for N = %.0d, CPU-time: %.08f seconds\n", length(t), N, time)
     
     if N == 100
         x = 0:Lx/N:Lx;
