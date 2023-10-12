@@ -52,5 +52,41 @@ tau = 1.1;
 u = saved_u(:,t==tau);
 
 plot(x,u)
+xlabel("x")
+title("Plot of u at specific \tau")
+legend("\tau = "+string(tau))
 
+%% Using matlab functions
+%% ODE23
+dudt = @(t,u) A*u+b(t);
 
+[t, u_ode23] = ode23(dudt, [0 2], u0);
+u_ode23 = u_ode23';
+
+N = length(u_ode23(:,1))+1;
+
+%Apply boundaries to solution
+uN = 1/3*(4*u_ode23(end,:)-u_ode23(end-1,:));
+u_initial = (sin(pi*t/a) .* (t<=a))';
+u_ode23 = [u_initial;u_ode23;uN];
+
+x = 0:Lx/N:Lx;
+surf(t,x,u_ode23)
+shading interp
+%% ODE23s
+
+dudt = @(t,u) A*u+b(t);
+
+[t, u_ode23s] = ode23s(dudt, [0 2], u0);
+u_ode23s = u_ode23s';
+
+N = length(u_ode23s(:,1))+1;
+
+%Apply boundaries to solution
+uN = 1/3*(4*u_ode23s(end,:)-u_ode23s(end-1,:));
+u_initial = (sin(pi*t/a) .* (t<=a))';
+u_ode23s = [u_initial;u_ode23s;uN];
+
+x = 0:Lx/N:Lx;
+surf(t,x,u_ode23s)
+shading interp
