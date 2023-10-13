@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 240;
+N = 120;
 h = Lx/N;
 M = Ly/h;
 
@@ -66,7 +66,7 @@ for frame = 1:1:40/dt+1
     zlim([25 70])
     xlabel("y")
     ylabel("x")
-        
+    title("Solution at \tau = " + string(frame*dt-dt))
     drawnow; % Refresh the plot
 
     %Save at (6,2), for part c
