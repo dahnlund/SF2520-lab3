@@ -56,7 +56,7 @@ x = 0:h:Lx;
 
 %%% Reshaping u and add boundaries:
 %------------------------------------------------------------------
-u = reshape(saved_u, (N-1), (M-1), T/dt+1); % Reshape
+u = reshape(saved_u, (N-1), (M-1), T/dt+1); % Reshape to 3D  matrix
 
 u_y0 = T_ext * ones(N-1,T/dt+1);
 u_y0 = reshape(u_y0, [(N-1),1,T/dt+1]);
