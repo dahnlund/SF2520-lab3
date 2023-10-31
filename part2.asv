@@ -105,9 +105,13 @@ x_cord = 6;
 y_cord = 2;
 timepoint = 40;
 
-u_cord = reshape(u(x_cord/h+1,y_cord/h+1,:),timepoint/dt+1,1);
+u_cord = reshape(u(x_cord/h+1,y_cord/h+1,:),length(,1);
 
-fprintf("u(%.02f,%.02f,%.02f) = %.04f\n\n", x_cord, y_cord, timepoint, u_62(end))
+fprintf("u(%.01f,%.01f,%.0f) = %.04f\n\n", x_cord, y_cord, timepoint, u_cord(end))
 
 plot(tau, u_cord)
+xlabel("x")
+ylabel("y")
+xlabel("Temperature")
+title("Temperature at time " + string(timepoint) + ", at cordinate (" + string(x_cord) + "," + string(y_cord) + ")")
    
