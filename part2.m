@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 240;
+N = 60*5;
 h = Lx/N;
 M = Ly/h;
 
@@ -90,7 +90,7 @@ frames = [0 1 4 12 22 40];
 for i = 1:length(frames)
     
     figure
-    mesh(y,x,u(:,:,tau == frames(i))); % Update the plot
+    mesh(y,x,u(:,:,round(frames(i)/dt)+1));
     view([-71.1 21.5877372262774]);
     zlim([25 70])
     xlabel("y")
