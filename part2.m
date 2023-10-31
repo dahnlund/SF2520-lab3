@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 60*5;
+N = 60*4;
 h = Lx/N;
 M = Ly/h;
 
@@ -101,9 +101,17 @@ end
 
 %% C
 
-u_62 = reshape(u(6/h+1,2/h+1,:),length(tau),1);
+x_cord = 6;
+y_cord = 2;
+timepoint = 40;
 
-fprintf("u(6,2,40) = %.04f\n\n", u_62(end))
+u_cord = reshape(u(x_cord/h+1,y_cord/h+1,:),timepoint/dt+1,1);
 
-plot(tau, u_62)
+fprintf("u(%.01f,%.01f,%.0f) = %.04f\n\n", x_cord, y_cord, timepoint, u_cord(end))
+
+plot(tau, u_cord)
+xlabel("x")
+ylabel("y")
+xlabel("Temperature")
+title("Temperature at time " + string(timepoint) + ", at cordinate (" + string(x_cord) + "," + string(y_cord) + ")")
    
