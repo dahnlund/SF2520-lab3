@@ -39,16 +39,17 @@ saved_u = zeros(length(u0),length(tau));
 saved_u(:,1) = u0;
 
 LHS = speye(size(A)) - 1/2 * dt*A;
-[L, U, P] = lu(LHS); % store lu decomposition to avoid recalculation
+LHS = decomposition(LHS, "lu");
 
 uk = u0;
+tic
 for i = 2:length(tau)
     RHS = (speye(size(A)) + 1/2 * dt*A)*uk + dt*f;
-    u_new = U \ (L \ (P * RHS));
+    u_new = LHS\RHS;
     saved_u(:,i) = u_new;
     uk = u_new;
 end
-
+toc
 
 y = 0:h:Ly;
 x = 0:h:Lx;
@@ -72,7 +73,7 @@ u = [u_x0;u;u_N];  %Adding boundaries along x. Ultimatily creating the final u m
 %------------------------------------------------------------------
 
 %Plot the solution
-for frame = 1:1:length(tau)
+for frame = 1:1:0
 
     mesh(y,x,u(:,:,frame)); % Update the plot
     view([-71.1 21.5877372262774]);
@@ -101,7 +102,7 @@ end
 
 %% C
 
-u_62 = reshape(u(6/h+1,2/h+1,:),length(tau),1);
+u_62 = reshape(u(6/h+1,2/h+1,:),[],1);
 
 fprintf("u(6,2,40) = %.04f\n\n", u_62(end))
 
