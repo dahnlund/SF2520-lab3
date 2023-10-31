@@ -73,7 +73,7 @@ u = [u_x0;u;u_N];  %Adding boundaries along x. Ultimatily creating the final u m
 %------------------------------------------------------------------
 
 %Plot the solution
-for frame = 1:1:0
+for frame = 1:1:length(tau)
 
     mesh(y,x,u(:,:,frame)); % Update the plot
     view([-71.1 21.5877372262774]);
