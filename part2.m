@@ -37,9 +37,14 @@ tau = 0:dt:40;
 saved_u = zeros(length(u0),length(tau));
 saved_u(:,1) = u0;
 
+LHS = speye(size(A)) - 1/2 * dt*A;
+[L, U, P] = lu(LHS); % store lu decomposition to avoid recalculation
+
 uk = u0;
 for i = 2:length(tau)
-    u_new = (speye(size(A)) - 1/2 * dt*A)\((speye(size(A)) + 1/2 * dt*A)*uk + dt*f);
+    RHS = (speye(size(A)) + 1/2 * dt*A)*uk + dt*f;
+    u_new = U \ (L \ (P * RHS));
+
     saved_u(:,i) = u_new;
     uk = u_new;
 end
@@ -47,7 +52,7 @@ end
 u_62 = zeros(length(tau),1); % For part c
 
 %Plot the solution
-for frame = 1:1:40/dt+1
+for frame = 1:1:length(tau)
     tf = frame;
 
     y = 0:h:Ly;
