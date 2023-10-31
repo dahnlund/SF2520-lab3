@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 60*4;
+N = 60*6;
 h = Lx/N;
 M = Ly/h;
 
@@ -73,7 +73,8 @@ u = [u_x0;u;u_N];  %Adding boundaries along x. Ultimatily creating the final u m
 %------------------------------------------------------------------
 
 %Plot the solution
-for frame = 1:1:length(tau)
+interval = 2; % Higher -> faster animation
+for frame = 1:interval:length(tau)
 
     mesh(y,x,u(:,:,frame)); % Update the plot
     view([-71.1 21.5877372262774]);
