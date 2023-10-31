@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 60*6;
+N = 60*4;
 h = Lx/N;
 M = Ly/h;
 
@@ -112,8 +112,7 @@ u_cord = reshape(u(x_cord/h+1,y_cord/h+1,:),length(tau),1);
 fprintf("u(%.01f,%.01f,%.0f) = %.04f\n\n", x_cord, y_cord, timepoint, u_cord(timepoint/dt+1))
 
 plot(tau, u_cord)
-xlabel("x")
-ylabel("y")
-xlabel("Temperature")
-title("Temperature at time " + string(timepoint) + ", at cordinate (" + string(x_cord) + "," + string(y_cord) + ")")
+xlabel("\tau")
+ylabel("Temperature")
+title("Temperature at cordinate (" + string(x_cord) + "," + string(y_cord) + ")")
    
