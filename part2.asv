@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 240;
+N = 60;
 h = Lx/N;
 M = Ly/h;
 
@@ -49,6 +49,7 @@ for i = 2:length(tau)
     uk = u_new;
 end
 
+u_62 = zeros(length(tau),1); % For part c
 
 y = 0:h:Ly;
 x = 0:h:Lx;
@@ -82,26 +83,25 @@ for frame = 1:1:length(tau)
     title("Solution at \tau = " + string(frame*dt-dt))
     drawnow; % Refresh the plot
 
+    %Save at (6,2), for part c
+    u_62(frame) = u(round(x,6)==6,round(y,6)==2);
 end
 
 %% B
 frames = [0 1 4 12 22 40];
 
 for i = 1:length(frames)
-    
+
     figure
-    mesh(y,x,u(:,:,tau == frames(i))); % Update the plot
+    mesh(y,x,u(:,:,tau(i)); % Update the plot
     view([-71.1 21.5877372262774]);
     zlim([25 70])
     xlabel("y")
     ylabel("x")
     title("Solution at \tau = " + string(frames(i)))
-
 end
 
 %% C
-
-u_62 = reshape(u(6/h+1,2/h+1,:),length(tau),1);
 
 fprintf("u(6,2,40) = %.04f\n\n", u_62(end))
 
