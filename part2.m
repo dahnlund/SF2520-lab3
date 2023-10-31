@@ -81,7 +81,7 @@ for frame = 1:interval:length(tau)
     zlim([25 70])
     xlabel("y")
     ylabel("x")
-    title("Solution at \tau = " + string(frame*dt-dt))
+    title("Solution at \tau = " + string(round(frame*dt-dt)))
     drawnow; % Refresh the plot
 
 end
