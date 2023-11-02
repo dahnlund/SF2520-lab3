@@ -4,7 +4,7 @@ clear, clc;
 %Coefficients
 Lx = 12; Ly = 5; T_ext = 25;
 %% A
-N = 60*4;
+N = 60*8;
 h = Lx/N;
 M = Ly/h;
 
