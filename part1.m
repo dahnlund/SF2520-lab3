@@ -10,6 +10,8 @@ a = 1.2;
 
 M = d*2*T*N^2/(Lx^2);  %Discretization resolution in t (according to theory)
 
+%Equivalent stability condition: f(\Delta x, \Delta t) = \frac{\Delta t}{(\Delta x)^2} < \frac{1}{2d} = c
+
 dx = Lx/N;
 dt = T/M;
 
