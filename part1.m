@@ -45,6 +45,9 @@ saved_u = [u_initial;saved_u;uN];
 x = 0:dx:Lx;
 surf(t,x,saved_u)
 shading interp
+zlabel("Temperatur")
+xlabel("time, t")
+ylabel("Rod position x")
 
 %% Plot at specific tau
 
@@ -55,6 +58,19 @@ plot(x,u)
 xlabel("x")
 title("Plot of u at specific \tau")
 legend("\tau = "+string(tau))
+
+%% Plot at boundaries, as a function of time
+
+u_leftend = saved_u(1, :);
+u_rightend = saved_u(end, :);
+
+plot(t,u_leftend)
+hold on
+plot(t, u_rightend)
+xlabel("t")
+ylabel("Temperature")
+title("Plot of u at ends (through time)")
+legend("x = 0", "x = " + string(Lx))
 
 %% Using matlab functions:
 %% ODE23
